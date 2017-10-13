@@ -259,7 +259,8 @@ class PrimaryKey(Constraint):
     def query():
         return """
             SELECT conname AS name, nspname AS schema,
-                   conrelid::regclass AS table, conkey AS columns,
+                   regexp_replace(conrelid::regclass::text,'"','','g') AS table, 
+                   conkey AS columns,
                    condeferrable AS deferrable, condeferred AS deferred,
                    amname AS access_method, spcname AS tablespace, c.oid,
                    indisclustered AS cluster, coninhcount > 0 AS inherited,
@@ -406,7 +407,8 @@ class ForeignKey(Constraint):
     def query():
         return """
             SELECT conname AS name, nspname AS schema,
-                   conrelid::regclass AS table, conkey AS columns,
+                   regexp_replace(conrelid::regclass::text,'"','','g') AS table, 
+                   conkey AS columns,
                    condeferrable AS deferrable, condeferred AS deferred,
                    confrelid::regclass AS ref_table, confkey AS ref_cols,
                    confupdtype AS on_update, confdeltype AS on_delete,
@@ -623,7 +625,8 @@ class UniqueConstraint(Constraint):
     def query():
         return """
             SELECT conname AS name, nspname AS schema,
-                   conrelid::regclass AS table, conkey AS columns,
+                   regexp_replace(conrelid::regclass::text,'"','','g') AS table, 
+                   conkey AS columns,
                    condeferrable AS deferrable, condeferred AS deferred,
                    amname AS access_method, spcname AS tablespace, c.oid,
                    indisclustered AS cluster, coninhcount > 0 AS inherited,
