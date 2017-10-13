@@ -575,8 +575,15 @@ class ForeignKey(Constraint):
             return pkey
 
         for uc in list(ref_table.unique_constraints.values()):
-            if uc.columns == self.ref_cols:
-                return uc
+            # TODO: refactor this workaround (sometimes returns dict, sometimes list)
+            # May be problem in different behaviour of pk and unique idx
+            if hasattr(uc,'keys'):
+                if 'columns' in uc.keys():
+                    if uc['columns'] == self.ref_cols:
+                        return uc
+            else:
+                if uc.columns == self.ref_cols:
+                    return uc
 
         if hasattr(ref_table, 'indexes'):
             if isinstance(self.ref_cols[0], int):
