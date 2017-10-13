@@ -120,7 +120,7 @@ class Sequence(DbClass):
         return 'rwU'
 
     def get_attrs(self, dbconn):
-        """Get the attributes for the sequence
+        """Get the attributes for the sequence PostgreSQL version <= 9.6
 
         :param dbconn: a DbConnection object
         """
@@ -287,6 +287,23 @@ class Sequence(DbClass):
         if self.owner_table is None:
             stmts.append(super(Sequence, self).drop())
         return stmts
+
+
+class SequenceV10(Sequence):
+    def get_attrs(self, dbconn):
+        """Get the attributes for the sequence PostgreSQL version >= 10
+
+        :param dbconn: a DbConnection object
+        """
+        data = dbconn.fetchone(
+            "SELECT start_value, increment_by, max_value, min_value, "
+                "cache_size as cache_value "
+            "FROM pg_sequences WHERE true "
+            "AND schemaname = '%s' "
+            "AND sequencename = '%s'" % (quote_id(self.schema), quote_id(self.name)))
+
+        for key, val in list(data.items()):
+            setattr(self, key, val)
 
 
 class Table(DbClass):
@@ -708,7 +725,7 @@ class ClassDict(DbObjectDict):
             (sch, tbl) = split_schema_obj(tbl)
             table = self[(sch, tbl)]
             table.inherits.append(partbl)
-        self.cls = Sequence
+        self.cls = self.dbconn.sequence_class()
         for obj in self.fetch():
             self[obj.key()] = obj
             self.by_oid[obj.oid] = obj

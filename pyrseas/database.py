@@ -24,7 +24,7 @@ from pyrseas.dbobject.language import LanguageDict
 from pyrseas.dbobject.cast import CastDict
 from pyrseas.dbobject.schema import SchemaDict
 from pyrseas.dbobject.dbtype import TypeDict
-from pyrseas.dbobject.table import ClassDict
+from pyrseas.dbobject.table import ClassDict, Sequence, SequenceV10
 from pyrseas.dbobject.column import ColumnDict
 from pyrseas.dbobject.constraint import ConstraintDict
 from pyrseas.dbobject.index import IndexDict
@@ -73,6 +73,12 @@ class CatDbConnection(DbConnection):
     def version(self):
         "The server's version number"
         return self._version
+
+    def sequence_class(self):
+        if self.version >= 100000:
+            return SequenceV10
+        else:
+            return Sequence
 
 
 class Database(object):
