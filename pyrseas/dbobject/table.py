@@ -124,7 +124,7 @@ class Sequence(DbClass):
 
         :param dbconn: a DbConnection object
         """
-        if dbconn.version < 10000:
+        if dbconn.version < 100000:
             data = dbconn.fetchone(
                 """SELECT start_value, increment_by, max_value, min_value,
                           cache_value
