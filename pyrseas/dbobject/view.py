@@ -6,7 +6,7 @@
     This module defines two classes: View derived from DbClass and
     MaterializedView derived from View.
 """
-
+from pyrseas.yamlutil import MultiLineStr
 from . import commentable, ownable, grantable
 from .table import DbClass
 
@@ -26,7 +26,7 @@ class View(DbClass):
         """
         super(View, self).__init__(name, schema, description, owner,
                                    privileges)
-        self.definition = definition
+        self.definition = MultiLineStr(definition)
         self.oid = oid
 
     @staticmethod

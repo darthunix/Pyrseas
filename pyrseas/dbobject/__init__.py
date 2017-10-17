@@ -172,7 +172,7 @@ class DbObject(object):
         output them in block style.
         """
         self.name = name
-        self.description = description
+        self.description = description and MultiLineStr(description)
         self._init_own_privs(attrs.pop('owner', None),
                              attrs.pop('privileges', []))
         self.depends_on = []

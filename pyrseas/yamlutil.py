@@ -4,6 +4,7 @@
 from yaml import add_representer, dump
 
 from pyrseas.lib.pycompat import PY2
+import re
 
 
 if PY2:
@@ -17,7 +18,13 @@ else:
 
 
 def MultiLineStr_presenter(dumper, data):
-    return dumper.represent_scalar('tag:yaml.org,2002:str', data, style='|')
+    """
+
+    :param yaml.Dumper dumper:
+    :param MultiLineStr data:
+    """
+    data_pretty = re.sub(r"\s*(?:\r|\n|\r\n)","\n", data.replace("\t","  ").strip())
+    return dumper.represent_scalar('tag:yaml.org,2002:str', data_pretty, style='|')
 add_representer(MultiLineStr, MultiLineStr_presenter)
 
 

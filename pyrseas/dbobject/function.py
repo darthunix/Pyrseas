@@ -7,6 +7,7 @@
     DbSchemaObject, Function and Aggregate derived from Proc, and
     FunctionDict derived from DbObjectDict.
 """
+from pyrseas.yamlutil import MultiLineStr
 from . import DbObjectDict, DbSchemaObject
 from . import commentable, ownable, grantable, split_schema_obj
 
@@ -101,9 +102,8 @@ class Function(Proc):
         super(Function, self).__init__(
             name, schema, description, owner, privileges, arguments)
         self.language = language
-        self.source = source
         self.returns = returns
-        self.source = source
+        self.source = MultiLineStr(source)
         self.obj_file = obj_file
         self.configuration = configuration
         self.allargs = allargs
