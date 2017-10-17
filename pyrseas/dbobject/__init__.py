@@ -118,7 +118,8 @@ def grantable(func):
         stmts = func(obj, *args, **kwargs)
         if hasattr(obj, 'privileges'):
             for priv in obj.privileges:
-                stmts.append(add_grant(obj, priv))
+                if priv != '':
+                    stmts.append(add_grant(obj, priv))
         return stmts
     return grant
 
