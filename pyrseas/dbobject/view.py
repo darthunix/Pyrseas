@@ -107,7 +107,7 @@ class View(DbClass):
         input.
         """
         stmts = []
-        if self.definition != inview.definition:
+        if self.definition.pretty() != inview.definition.pretty():
             stmts.append(self.create(inview.definition))
         stmts.append(super(View, self).alter(inview))
         return stmts

@@ -17,6 +17,13 @@ else:
         """ Marker for multiline strings"""
 
 
+def pretty(self):
+    return re.sub(r"\s*(?:\r|\n|\r\n)","\n", self.replace("\t","  ").strip())
+
+
+MultiLineStr.pretty = pretty
+
+
 def MultiLineStr_presenter(dumper, data):
     """
 
